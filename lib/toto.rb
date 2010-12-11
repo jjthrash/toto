@@ -36,6 +36,7 @@ module Toto
   module Template
     def to_html page, config, &blk
       path = ([:layout, :repo].include?(page) ? Paths[:templates] : Paths[:pages])
+      self.class.class_eval(&config[:helpers])
       config[:to_html].call(path, page, binding)
     end
 
@@ -301,6 +302,8 @@ module Toto
       },
       :error => lambda {|code|                              # The HTML for your error page
         "<font style='font-size:300%'>toto, we're not in Kansas anymore (#{code})</font>"
+      },
+      :helpers => lambda {|*args|
       }
     }
     def initialize obj
